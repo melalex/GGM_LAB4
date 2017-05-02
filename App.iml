@@ -8,5 +8,8 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="j3d-org-java3d-all" level="project" />
+    <orderEntry type="library" name="j3dcore" level="project" />
+    <orderEntry type="library" name="ext" level="project" />
+    <orderEntry type="library" name="lib" level="project" />
   </component>
 </module>
