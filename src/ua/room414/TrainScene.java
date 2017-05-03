@@ -13,8 +13,8 @@ import java.awt.event.KeyListener;
 
 
 public class TrainScene extends JFrame implements KeyListener {
-    private static final int WINDOW_WIDTH = 640;
-    private static final int WINDOW_HEIGHT = 480;
+    private static final int WINDOW_WIDTH = 700;
+    private static final int WINDOW_HEIGHT = 700;
     private static final String WINDOW_TITLE = "Lab4";
 
     private Canvas3D canvas;
