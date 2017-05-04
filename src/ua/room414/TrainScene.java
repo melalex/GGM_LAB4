@@ -91,16 +91,12 @@ public class TrainScene extends JFrame implements KeyListener {
     public void keyTyped(KeyEvent keyEvent) {
         if (keyEvent.getKeyChar() == 'w') {
             train.rotateUp();
-            System.out.println("X: " + train.getAngleX());
         } else if (keyEvent.getKeyChar() == 'a') {
             train.rotateLeft();
-            System.out.println("Y: " + train.getAngleY());
         } else if (keyEvent.getKeyChar() == 's') {
             train.rotateDown();
-            System.out.println("X: " + train.getAngleX());
         } else if (keyEvent.getKeyChar() == 'd') {
             train.rotateRight();
-            System.out.println("Y: " + train.getAngleY());
         }
     }
 

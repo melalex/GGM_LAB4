@@ -1,8 +1,8 @@
 package ua.room414;
 
 import com.sun.j3d.utils.geometry.Box;
-import com.sun.j3d.utils.geometry.ColorCube;
 import com.sun.j3d.utils.geometry.Cylinder;
+import com.sun.j3d.utils.geometry.Primitive;
 import com.sun.j3d.utils.image.TextureLoader;
 
 import javax.media.j3d.*;
@@ -11,6 +11,7 @@ import javax.vecmath.Color4f;
 import javax.vecmath.Matrix3d;
 import javax.vecmath.Vector3d;
 import java.awt.*;
+import java.io.File;
 
 /**
  * @author Alexander Melashchenko
@@ -43,35 +44,81 @@ public class Train {
         TransformGroup transformGroup = new TransformGroup();
         transformGroup.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
 
-        Cylinder boiler = new Cylinder(0.29f, 0.64f);
-        boiler.setAppearance();
-
         transformGroup.addChild(transformNode(
-                boiler,
+                createCylinder(0.29f, 0.64f),
                 new Vector3d(-0.21, 0, 0),
                 createRotationMatrix(0, 0, -Math.PI / 2)
         ));
 
-        Box suspension = new Box(0.32f, 0.07f, 0.29f, null);
-        suspension.setAppearance();
-
         transformGroup.addChild(transformNode(
-                suspension,
+                createBox(0.32f, 0.07f, 0.29f),
                 new Vector3d(-0.21, -0.29, 0),
                 createRotationMatrix(0, 0, 0)
         ));
 
-        Box cabin = new Box(0.29f, 0.5f, 0.29f, null);
-        suspension.setAppearance();
-
         transformGroup.addChild(transformNode(
-                cabin,
+                createBox(0.29f, 0.5f, 0.29f),
                 new Vector3d(0.4, 0.14, 0),
                 createRotationMatrix(0, 0, 0)
         ));
 
+        transformGroup.addChild(transformNode(
+                createCylinder(0.15f, 0.07f),
+                new Vector3d(-0.4, -0.35, 0.32f),
+                createRotationMatrix(-Math.PI / 2, 0, 0)
+        ));
+
+        transformGroup.addChild(transformNode(
+                createCylinder(0.15f, 0.07f),
+                new Vector3d(-0.4, -0.35, -0.32f),
+                createRotationMatrix(-Math.PI / 2, 0, 0)
+        ));
+
+        transformGroup.addChild(transformNode(
+                createCylinder(0.15f, 0.07f),
+                new Vector3d(-0.05, -0.35, 0.32f),
+                createRotationMatrix(-Math.PI / 2, 0, 0)
+        ));
+
+        transformGroup.addChild(transformNode(
+                createCylinder(0.15f, 0.07f),
+                new Vector3d(-0.05, -0.35, -0.32f),
+                createRotationMatrix(-Math.PI / 2, 0, 0)
+        ));
+
+        transformGroup.addChild(transformNode(
+                createCylinder(0.25f, 0.1f),
+                new Vector3d(0.4, -0.25, 0.32f),
+                createRotationMatrix(-Math.PI / 2, 0, 0)
+        ));
+
+        transformGroup.addChild(transformNode(
+                createCylinder(0.25f, 0.1f),
+                new Vector3d(0.4, -0.25, -0.32f),
+                createRotationMatrix(-Math.PI / 2, 0, 0)
+        ));
+
+        transformGroup.addChild(transformNode(
+                createCylinder(0.05f, 0.3f),
+                new Vector3d(-0.4, 0.35f, 0f),
+                createRotationMatrix(0, 0, 0)
+        ));
 
         return transformGroup;
+    }
+
+    private static Box createBox(float x, float y, float z) {
+        Box box = new Box(x, y, z, Primitive.GENERATE_NORMALS | Primitive.GENERATE_TEXTURE_COORDS, null);
+        box.setAppearance(defaultAppearance());
+        addTexture(box.getAppearance(), "train.jpg");
+        return box;
+    }
+
+    private static Cylinder createCylinder(float r, float h) {
+        Cylinder cylinder = new Cylinder(r, h, Primitive.GENERATE_NORMALS | Primitive.GENERATE_TEXTURE_COORDS, null);
+        cylinder.setAppearance(defaultAppearance());
+        addTexture(cylinder.getAppearance(), "train.jpg");
+        return cylinder;
     }
 
     private static TransformGroup transformNode(Node obj, Vector3d pos, Matrix3d rotation) {
@@ -89,28 +136,30 @@ public class Train {
         return transformGroup;
     }
 
-    private static Appearance defaultAppearance(Color3f color, String picture) {
+    private static Appearance defaultAppearance() {
         Appearance ap = new Appearance();
 
-        Color3f ambient = new Color3f(0.2f, 0.15f, .15f);
-        Color3f diffuse = new Color3f(1.2f, 1.15f, .15f);
-        Color3f specular = new Color3f(0.0f, 0.0f, 0.0f);
-        ap.setMaterial(new Material(ambient, color, diffuse, specular, 1.0f));
-
-
-        if (!picture.equals("")) {
-            TextureLoader loader = new TextureLoader(picture, "LUMINANCE", new Container());
-            Texture texture = loader.getTexture();
-            texture.setBoundaryModeS(Texture.WRAP);
-            texture.setBoundaryModeT(Texture.WRAP);
-            texture.setBoundaryColor(new Color4f(0.0f, 1.0f, 1.0f, 0.0f));
-            TextureAttributes texAttr = new TextureAttributes();
-            texAttr.setTextureMode(TextureAttributes.MODULATE);
-            ap.setTexture(texture);
-            ap.setTextureAttributes(texAttr);
-        }
+        Color3f var1 = new Color3f(0.1F, 0.1F, 0.1F);
+        Color3f var2 = new Color3f(0.0F, 0.0F, 0.0F);
+        Color3f var3 = new Color3f(0.6F, 0.6F, 0.6F);
+        Color3f var4 = new Color3f(1.0F, 1.0F, 1.0F);
+        Material var5 = new Material(var1, var2, var3, var4, 100.0F);
+        var5.setLightingEnable(true);
+        ap.setMaterial(var5);
 
         return ap;
+    }
+
+    private static void addTexture(Appearance ap, String picture) {
+        TextureLoader loader = new TextureLoader(picture, "LUMINANCE", new Container());
+        Texture texture = loader.getTexture();
+        texture.setBoundaryModeS(Texture.WRAP);
+        texture.setBoundaryModeT(Texture.WRAP);
+        texture.setBoundaryColor(new Color4f(0.0f, 1.0f, 1.0f, 0.0f));
+        TextureAttributes texAttr = new TextureAttributes();
+        texAttr.setTextureMode(TextureAttributes.MODULATE);
+        ap.setTexture(texture);
+        ap.setTextureAttributes(texAttr);
     }
 
     private static Matrix3d createRotationMatrix(double x, double y, double z) {
